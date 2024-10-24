@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class AddExperimentPage extends StatefulWidget {
@@ -8,6 +10,8 @@ class AddExperimentPage extends StatefulWidget {
 }
 
 class _AddExperimentPageState extends State<AddExperimentPage> {
+  //final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -59,14 +63,19 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Handle experiment creation here
-                        // ...
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Experiment added successfully')),
-                        );
-                      }
+                    onPressed: () async {
+                    //   Map<String, dynamic> data = {
+                    //     "name": _nameController.text.toString(),
+                    //     "description": _descriptionController.text.toString(),
+                    //   };
+
+                    //   try {
+                    //     await dbRef.child("Experiment").push().set(data);
+                    //     Navigator.of(context).pop();
+                    //   } catch (error) {
+                    //     // Handle errors here, e.g., show a snackbar or a dialog
+                    //     print("Error writing data to Firebase: $error");
+                    //   }
                     },
                     child: const Text('Add'),
                   ),
