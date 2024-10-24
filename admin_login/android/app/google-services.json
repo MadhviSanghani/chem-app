@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "956761330395",
+    "project_id": "chem4u-3b77f",
+    "storage_bucket": "chem4u-3b77f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956761330395:android:8749b17a72a7bbffb5f2fe",
+        "android_client_info": {
+          "package_name": "com.example.admin_login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1TDVmnMV8nQr-LH-3wnkd_sgHzAdY8KY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
