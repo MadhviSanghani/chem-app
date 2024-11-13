@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "956761330395",
-    "project_id": "chem4u-3b77f",
-    "storage_bucket": "chem4u-3b77f.appspot.com"
+    "project_number": "834281610808",
+    "project_id": "finalproject-e69b2",
+    "storage_bucket": "finalproject-e69b2.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:956761330395:android:8749b17a72a7bbffb5f2fe",
+        "mobilesdk_app_id": "1:834281610808:android:2603644a0e08198c1210cd",
         "android_client_info": {
           "package_name": "com.example.admin_login"
         }
@@ -15,7 +15,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB1TDVmnMV8nQr-LH-3wnkd_sgHzAdY8KY"
+          "current_key": "AIzaSyApa5XZRMipub7mH8I3WqAhVCczZybsRus"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:834281610808:android:7175595a40f4226c1210cd",
+        "android_client_info": {
+          "package_name": "com.example.chemlab"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApa5XZRMipub7mH8I3WqAhVCczZybsRus"
         }
       ],
       "services": {

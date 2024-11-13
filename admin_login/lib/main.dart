@@ -2,11 +2,28 @@
 import 'package:admin_login/login/login.dart';
 //import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
+import 'firebase_options.dart';
 
 void main() async{
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
-  runApp(const MyApp());
+
+  // try {
+  //   // Initialize Firebase and register controllers lazily
+  //   await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptions.currentPlatform,
+  //   ).then((value) {
+  //     Get.put(AuthenticationRepository());
+  //     // Use lazyPut for the SignupPageController
+  //     Get.lazyPut<SignupPageController>(() => SignupPageController());
+  //   });
+  // } catch (e) {
+  //   print('Error initializing Firebase: $e');
+  // }
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
