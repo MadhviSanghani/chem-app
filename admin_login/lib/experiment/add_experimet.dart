@@ -1,6 +1,16 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+Future<void> experiments_add(String name, String description) async {
+  CollectionReference experiments = FirebaseFirestore.instance.collection('experiments');
+
+  await experiments.add({
+    'name': name,
+    'description': description,
+    'createdAt': FieldValue.serverTimestamp(),
+  });
+}
 
 class AddExperimentPage extends StatefulWidget {
   const AddExperimentPage({Key? key}) : super(key: key);
@@ -10,8 +20,6 @@ class AddExperimentPage extends StatefulWidget {
 }
 
 class _AddExperimentPageState extends State<AddExperimentPage> {
-  //final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
-
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -64,18 +72,19 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
                   const SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () async {
-                    //   Map<String, dynamic> data = {
-                    //     "name": _nameController.text.toString(),
-                    //     "description": _descriptionController.text.toString(),
-                    //   };
-
-                    //   try {
-                    //     await dbRef.child("Experiment").push().set(data);
-                    //     Navigator.of(context).pop();
-                    //   } catch (error) {
-                    //     // Handle errors here, e.g., show a snackbar or a dialog
-                    //     print("Error writing data to Firebase: $error");
-                    //   }
+                      // Validate the form fields
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          await experiments_add(
+                            _nameController.text,
+                            _descriptionController.text,
+                          );
+                          Navigator.of(context).pop(); // Go back after successful addition
+                        } catch (error) {
+                          // Handle errors here, e.g., show a snackbar or a dialog
+                          print("Error adding data to Firebase: $error");
+                        }
+                      }
                     },
                     child: const Text('Add'),
                   ),
