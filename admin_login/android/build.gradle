@@ -4,6 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
         // Add this line to include Google services classpath
         classpath 'com.google.gms:google-services:4.3.13'
     }
@@ -27,4 +28,4 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
-apply plugin: 'com.google.gms.google-services'
+

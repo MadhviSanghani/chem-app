@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -7,10 +8,10 @@ class AddChemical extends StatefulWidget {
   const AddChemical({Key? key}) : super(key: key);
 
   @override
-  _AddEquipmentPageState createState() => _AddEquipmentPageState();
+  _AddChemicalState createState() => _AddChemicalState();
 }
 
-class _AddEquipmentPageState extends State<AddChemical> {
+class _AddChemicalState extends State<AddChemical> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   XFile? _selectedImage;
@@ -22,6 +23,45 @@ class _AddEquipmentPageState extends State<AddChemical> {
       setState(() {
         _selectedImage = image;
       });
+    }
+  }
+
+  Future<void> _uploadData() async {
+    if (_selectedImage == null || _nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please provide both name and image')),
+      );
+      return;
+    }
+
+    try {
+      // Upload image to Firebase Storage
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('chemicals/${DateTime.now().millisecondsSinceEpoch}.jpg');
+      await storageRef.putFile(File(_selectedImage!.path));
+      final imageUrl = await storageRef.getDownloadURL();
+
+      // Save chemical data to Firestore
+      await FirebaseFirestore.instance.collection('chemicals').add({
+        'name': _nameController.text,
+        'image_url': imageUrl,
+      });
+
+      // Clear form and show success message
+      _nameController.clear();
+      setState(() {
+        _selectedImage = null;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Chemical added successfully')),
+      );
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error uploading data')),
+      );
     }
   }
 
@@ -50,10 +90,8 @@ class _AddEquipmentPageState extends State<AddChemical> {
                         child: const Text('Choose file'),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          // Handle image upload here
-                        },
-                        child: const Text('Upload image'),
+                        onPressed: _uploadData,
+                        child: const Text('Upload image and add'),
                       ),
                     ],
                   ),
@@ -77,19 +115,6 @@ class _AddEquipmentPageState extends State<AddChemical> {
                       }
                       return null;
                     },
-                  ),
-                  const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Handle equipment creation here
-                        // ...
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Chemical added successfully')),
-                        );
-                      }
-                    },
-                    child: const Text('Add'),
                   ),
                 ],
               ),

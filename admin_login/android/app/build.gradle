@@ -26,6 +26,9 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
 android {
     namespace = "com.example.admin_login"
     compileSdk = flutter.compileSdkVersion
@@ -36,6 +39,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    compileSdkVersion 33
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.admin_login"
@@ -43,12 +48,20 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 23
         //minSdk = flutter.minSdkVersion
-        compileSdkVersion 34
-        targetSdkVersion 34
+        //compileSdkVersion 34
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
 
         //targetSdk = flutter.targetSdkVersion
-        versionCode = flutterVersionCode.toInteger()
-        versionName = flutterVersionName
+        // versionCode = flutterVersionCode.toInteger()
+        // versionName = flutterVersionName
+    }
+
+    dependencies {
+    implementation platform('com.google.firebase:firebase-bom:31.2.3') // Use latest BOM version
+    implementation 'com.google.firebase:firebase-analytics'
+    // Add other Firebase dependencies if needed
     }
 
     buildTypes {
