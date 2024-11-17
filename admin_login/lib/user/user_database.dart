@@ -1,44 +1,59 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class UserListScreen extends StatelessWidget {
-  final List<Map<String, dynamic>> users = [
-    {'Srno': 1, 'Username': 'Priyal', 'Password': 'P5ri67rs'},
-    {'Srno': 2, 'Username': 'Madhvi', 'Password': 'M@dh5'},
-    {'Srno': 3, 'Username': 'Khushi', 'Password': 'kRg7342'},
-    {'Srno': 4, 'Username': 'Karan', 'Password': 'k*ra679f'},
-  ];
+  const UserListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF8BCDDC),
       appBar: AppBar(
-        title: Text('Users'),
+        title: const Text('Users'),
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: DataTable(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black),
-            ),
-            columns: [
-              DataColumn(label: Text('Srno')),
-              DataColumn(label: Text('Username')),
-              DataColumn(label: Text('Password')),
-            ],
-            rows: users.map((user) {
-              return DataRow(
-                cells: [
-                  DataCell(Text(user['Srno'].toString())),
-                  DataCell(Text(user['Username'])),
-                  DataCell(Text(user['Password'])),
-                ],
-              );
-            }).toList(),
-            // horizontalSeparatorBuilder: (int index, bool selected) => Divider(color: Colors.black),
-            // verticalSeparatorBuilder: (int index, bool selected) => Divider(color: Colors.black),
-          ),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('Users').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator(); // Show loading indicator while data is loading
+            }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return const Text('No users found'); // Handle case with no data
+            }
+
+            final List<QueryDocumentSnapshot> users = snapshot.data!.docs;
+
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical, // Enable vertical scrolling
+                child: DataTable(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black),
+                  ),
+                  columns: const [
+                    DataColumn(label: Text('Srno')),
+                    DataColumn(label: Text('Username')),
+                    DataColumn(label: Text('Password')),
+                  ],
+                  rows: users.asMap().entries.map((entry) {
+                    final index = entry.key + 1; // Add 1 for Srno
+                    final user = entry.value.data() as Map<String, dynamic>;
+
+                    return DataRow(
+                      cells: [
+                        DataCell(Text(index.toString())), // Srno
+                        DataCell(Text(user['username'] ?? 'N/A')), // Username
+                        DataCell(Text(user['password'] ?? 'N/A')), // Password
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
