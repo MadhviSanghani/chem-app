@@ -1,74 +1,67 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'add_equipment.dart';
 
 class EquipmentDatabase extends StatelessWidget {
   const EquipmentDatabase({Key? key}) : super(key: key);
 
-  Stream<List<Map<String, dynamic>>> _fetchEquipments() {
-    return FirebaseFirestore.instance.collection('equipment').snapshots().map(
-      (snapshot) {
-        return snapshot.docs.map((doc) {
-          return {
-            'id': doc.id,
-            'image_url': doc['image_url'] ?? '',
-            'name': doc['name'] ?? '',
-          };
-        }).toList();
+  // Static data for equipment
+  List<Map<String, dynamic>> _fetchEquipments() {
+    return [
+      {
+        'id': '1',
+        'image_url': 'assets/pipette.webp',
+        'name': 'Pipette',
       },
-    );
+      {
+        'id': '2',
+        'image_url': 'assets/testtube.webp',
+        'name': 'Testtube',
+      },
+      {
+        'id': '3',
+        'image_url': 'assets/watch-glass.jpeg',
+        'name': 'Watch Glass',
+      },
+    ];
   }
 
   Future<void> _deleteEquipment(String id) async {
-    try {
-      await FirebaseFirestore.instance.collection('equipment').doc(id).delete();
-    } catch (e) {
-      print('Error deleting document: $e');
-    }
+    // Simulate a delete action
+    print('Deleted equipment with id: $id');
   }
 
   @override
   Widget build(BuildContext context) {
+    final equipments = _fetchEquipments();
+
     return Scaffold(
       backgroundColor: const Color(0xFF8BCDDC),
       appBar: AppBar(
         title: Text('Equipments'),
       ),
       body: Center(
-        child: StreamBuilder<List<Map<String, dynamic>>>(
-          stream: _fetchEquipments(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Text('No equipment found.');
-            }
-
-            final equipments = snapshot.data!;
-
-            return SingleChildScrollView(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              color: Colors.white,
               child: DataTable(
-                columnSpacing: 30.0,
-                dataRowHeight: 70,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black),
-                ),
+                columnSpacing: 20.0,
+                dataRowHeight: 120.0,
                 columns: [
-                  DataColumn(label: Text('Equipment')),
+                  DataColumn(label: Text('Image')),
                   DataColumn(label: Text('Name')),
-                  DataColumn(label: Text('Delete')),
+                  DataColumn(label: Text('Action')),
                 ],
                 rows: equipments.map((equipment) {
                   return DataRow(
                     cells: [
                       DataCell(
-                        Image.network(
+                        Image.asset(
                           equipment['image_url'],
-                          width: 50,
-                          height: 50,
+                          width: 100, // Set image width
+                          height: 100, // Set image height
                           errorBuilder: (context, error, stackTrace) =>
                               Icon(Icons.image_not_supported),
                         ),
@@ -78,7 +71,6 @@ class EquipmentDatabase extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () async {
                             await _deleteEquipment(equipment['id']);
-                            print('Deleted ${equipment['name']}');
                           },
                           child: Text('Delete'),
                         ),
@@ -87,8 +79,8 @@ class EquipmentDatabase extends StatelessWidget {
                   );
                 }).toList(),
               ),
-            );
-          },
+            ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

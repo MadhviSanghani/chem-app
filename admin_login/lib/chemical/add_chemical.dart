@@ -47,14 +47,20 @@ class _AddChemicalState extends State<AddChemical> {
       final String fileName =
           'chemicals/${DateTime.now().millisecondsSinceEpoch}.jpg';
       final Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
-
+      print('Storage Reference Path: ${storageRef.fullPath}');
+      print('Filename' + fileName);
+       
       final TaskSnapshot uploadTask = await storageRef.putData(_imageBytes!);
+      // if (kDebugMode) {
+      //   print('uploadtask:'+uploadTask);
+      // }
       final String imageUrl = await uploadTask.ref.getDownloadURL(); // Get image URL
+      print('imageurl:'+imageUrl);
 
       // Save chemical data to Firestore
       await FirebaseFirestore.instance.collection('chemicals').add({
-        'name': _nameController.text.trim(),
-        'image_url': imageUrl,
+        'image': _nameController.text.trim(),
+        'name': imageUrl,
         'created_at': FieldValue.serverTimestamp(),
       });
 

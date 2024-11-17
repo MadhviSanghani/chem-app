@@ -1,6 +1,9 @@
 
 //import 'package:admin_login/experiment/add_experimet.dart';
 import 'package:admin_login/chemical/add_chemical.dart';
+import 'package:admin_login/chemical/chemical_database.dart';
+import 'package:admin_login/equipment/add_equipment.dart';
+import 'package:admin_login/equipment/equipment_database.dart';
 import 'package:admin_login/experiment/add_experimet.dart';
 import 'package:admin_login/experiment/experiment_database.dart';
 import 'package:admin_login/firebase_options.dart';
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const UserListScreen(),
+      home: ExperimentPage(),
     );
   }
 }

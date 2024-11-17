@@ -1,94 +1,64 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'add_chemical.dart';
 
 class ChemicalListScreen extends StatelessWidget {
-  const ChemicalListScreen({Key? key}) : super(key: key);
+   ChemicalListScreen({Key? key}) : super(key: key);
 
-  Stream<List<Map<String, dynamic>>> _fetchChemicals() {
-    return FirebaseFirestore.instance.collection('chemical').snapshots().map(
-      (snapshot) {
-        return snapshot.docs.map((doc) {
-          return {
-            'id': doc.id,
-            'image_url': doc['image_url'] ?? '',
-            'name': doc['name'] ?? '',
-          };
-        }).toList();
-      },
-    );
-  }
-
-  Future<void> _deleteChemical(String id) async {
-    try {
-      await FirebaseFirestore.instance.collection('chemical').doc(id).delete();
-    } catch (e) {
-      print('Error deleting document: $e');
-    }
-  }
+  // Static list of chemicals
+  final List<Map<String, dynamic>> chemicals = [
+    {'id': 1, 'image_url': 'assets/ch3cooh.webp', 'name': 'CH3COOH'},
+    {'id': 2, 'image_url': 'assets/h2so4.jpg', 'name': 'H2SO4'},
+    {'id': 3, 'image_url': 'assets/koh.webp', 'name': 'KOH'},
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF8BCDDC),
       appBar: AppBar(
-        title: Text('Chemicals'),
+        title: const Text('Chemicals'),
       ),
       body: Center(
-        child: StreamBuilder<List<Map<String, dynamic>>>(
-          stream: _fetchChemicals(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Text('No chemicals found.');
-            }
-
-            final chemicals = snapshot.data!;
-
-            return SingleChildScrollView(
-              child: DataTable(
-                columnSpacing: 30.0,
-                dataRowHeight: 70,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black),
-                ),
-                columns: [
-                  DataColumn(label: Text('Chemical')),
-                  DataColumn(label: Text('Name')),
-                  DataColumn(label: Text('Delete')),
+        child: SingleChildScrollView(
+          child: DataTable(
+            columnSpacing: 30.0,
+            dataRowHeight: 70,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.black),
+            ),
+            columns: const [
+              DataColumn(label: Text('Chemical')),
+              DataColumn(label: Text('Name')),
+              DataColumn(label: Text('Delete')),
+            ],
+            rows: chemicals.map((chemical) {
+              return DataRow(
+                cells: [
+                  DataCell(
+                    Image.network(
+                      chemical['image_url'] ?? '',
+                      width: 50,
+                      height: 50,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.image_not_supported),
+                    ),
+                  ),
+                  DataCell(Text(chemical['name'] ?? '')),
+                  DataCell(
+                    ElevatedButton(
+                      onPressed: () {
+                        // Remove the selected chemical (static example)
+                        chemicals.remove(chemical);
+                        print('Deleted ${chemical['name']}');
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  ),
                 ],
-                rows: chemicals.map((chemical) {
-                  return DataRow(
-                    cells: [
-                      DataCell(
-                        Image.network(
-                          chemical['image_url'],
-                          width: 50,
-                          height: 50,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Icon(Icons.image_not_supported),
-                        ),
-                      ),
-                      DataCell(Text(chemical['name'])),
-                      DataCell(
-                        ElevatedButton(
-                          onPressed: () async {
-                            await _deleteChemical(chemical['id']);
-                            print('Deleted ${chemical['name']}');
-                          },
-                          child: Text('Delete'),
-                        ),
-                      ),
-                    ],
-                  );
-                }).toList(),
-              ),
-            );
-          },
+              );
+            }).toList(),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -101,7 +71,7 @@ class ChemicalListScreen extends StatelessWidget {
           );
           print('Add Chemical');
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
