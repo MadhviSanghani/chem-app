@@ -5,8 +5,19 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.4.2'
-        // Add this line to include Google services classpath
-        classpath 'com.google.gms:google-services:4.3.13'
+        //classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:latest.stable"
+        // classpath 'com.android.tools.build:gradle:7.4.2'
+        // // Add this line to include Google services classpath
+        // classpath 'com.google.gms:google-services:4.3.13'
+        // classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.google.gms:google-services:4.4.2'
+
+        //classpath 'com.android.tools.build:gradle:7.4.2' // (or your current AGP version)
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:latest.stable"
+    }
+
+    ext {
+    kotlin_version = 'latest.stable' // Use 'latest.stable' for the newest stable version
     }
 }
 

@@ -1,5 +1,8 @@
 
 //import 'package:admin_login/experiment/add_experimet.dart';
+import 'package:admin_login/experiment/add_experimet.dart';
+import 'package:admin_login/experiment/experiment_database.dart';
+import 'package:admin_login/firebase_options.dart';
 import 'package:admin_login/login/login.dart';
 //import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +13,11 @@ import 'package:firebase_core/firebase_core.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  var firebaseApp = await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, // Ensure this is imported
+  );
+  //WidgetsFlutterBinding.ensureInitialized();
+  //var firebaseApp = await Firebase.initializeApp();
 
   // try {
   //   // Initialize Firebase and register controllers lazily
@@ -40,7 +47,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AdminLoginPage(),
+      home: const AddExperimentPage(),
     );
   }
 }

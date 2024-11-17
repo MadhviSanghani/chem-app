@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddExperimentPage extends StatefulWidget {
   const AddExperimentPage({Key? key}) : super(key: key);
@@ -13,7 +13,6 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
 
-  // Dispose controllers to free up resources
   @override
   void dispose() {
     _nameController.dispose();
@@ -21,7 +20,6 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
     super.dispose();
   }
 
-  // Function to add experiment to Firestore
   Future<void> _addExperiment() async {
     if (_formKey.currentState!.validate()) {
       String name = _nameController.text.trim();
@@ -34,19 +32,15 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
           'createdAt': FieldValue.serverTimestamp(),
         });
 
-        // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Experiment added successfully')),
         );
 
-        // Clear the form
         _formKey.currentState!.reset();
       } catch (e) {
-        // Handle errors (e.g., network issues)
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to add experiment: $e')),
         );
-        print("Error adding experiment: $e");
       }
     }
   }
@@ -69,7 +63,6 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Name Field
                     TextFormField(
                       controller: _nameController,
                       decoration: const InputDecoration(
@@ -84,7 +77,6 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
                       },
                     ),
                     const SizedBox(height: 16.0),
-                    // Description Field
                     TextFormField(
                       controller: _descriptionController,
                       maxLines: 4,
@@ -100,7 +92,6 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
                       },
                     ),
                     const SizedBox(height: 16.0),
-                    // Add Button
                     ElevatedButton(
                       onPressed: _addExperiment,
                       child: const Text('Add'),

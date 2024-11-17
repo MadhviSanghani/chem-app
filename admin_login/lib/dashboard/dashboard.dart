@@ -1,5 +1,6 @@
 import 'package:admin_login/chemical/chemical_database.dart';
 import 'package:admin_login/equipment/equipment_database.dart';
+import 'package:admin_login/experiment/add_experimet.dart';
 import 'package:admin_login/experiment/experiment_database.dart';
 import 'package:admin_login/login/login.dart';
 import 'package:admin_login/user/user_database.dart';
@@ -111,7 +112,7 @@ class AdminDashboard extends StatelessWidget {
                         // Navigate to the Experiments page
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ExperimentPage()),
+                          MaterialPageRoute(builder: (context) => AddExperimentPage()),
                         );
                       },
                     ),
