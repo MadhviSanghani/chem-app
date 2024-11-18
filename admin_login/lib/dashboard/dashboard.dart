@@ -112,7 +112,7 @@ class AdminDashboard extends StatelessWidget {
                         // Navigate to the Experiments page
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => AddExperimentPage()),
+                          MaterialPageRoute(builder: (context) => ExperimentPage()),
                         );
                       },
                     ),
